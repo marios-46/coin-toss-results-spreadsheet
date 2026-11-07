@@ -1,0 +1,1395 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Create a Coin Toss Results Spreadsheet</title>
+  <meta name="description" content="Learn how to create a coin toss results spreadsheet in Excel or Google Sheets. Record heads and tails, calculate percentages, and analyse results.">
+  <meta name="keywords" content="coin toss results spreadsheet, coin flip spreadsheet, heads and tails tracker, coin toss data analysis, coin toss probability">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#392344">
+
+  <style>
+    :root {
+      --plum: #392344;
+      --plum-light: #563763;
+      --lime: #c9f36b;
+      --lime-dark: #91bd36;
+      --cream: #fbf8ef;
+      --paper: #ffffff;
+      --ink: #28232c;
+      --muted: #756d79;
+      --line: #e9e2e9;
+      --rose: #f7e9ef;
+      --green-soft: #edf6df;
+      --shadow: 0 16px 45px rgba(48, 29, 57, .09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      line-height: 1.75;
+    }
+
+    a {
+      color: var(--plum-light);
+      font-weight: 700;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    a:hover {
+      color: #789d25;
+    }
+
+    .site-header {
+      background: var(--plum);
+      color: #fff;
+      padding: 17px 6%;
+    }
+
+    .nav-inner {
+      max-width: 1160px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -.7px;
+    }
+
+    .brand span {
+      color: var(--lime);
+    }
+
+    .nav-note {
+      color: #e5dbe9;
+      font-size: 13px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 88% 20%, rgba(201,243,107,.19), transparent 24%),
+        linear-gradient(130deg, #392344 0%, #53345e 58%, #68466d 100%);
+      color: white;
+      padding: 82px 6% 78px;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      max-width: 1160px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 45px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: rgba(201,243,107,.13);
+      border: 1px solid rgba(201,243,107,.4);
+      color: var(--lime);
+      padding: 6px 13px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(35px, 5vw, 58px);
+      line-height: 1.12;
+      letter-spacing: -2px;
+      max-width: 760px;
+      margin-bottom: 22px;
+    }
+
+    .hero p {
+      color: #e9dfed;
+      font-size: 17px;
+      max-width: 690px;
+      margin-bottom: 26px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .hero-tags span {
+      border: 1px solid rgba(255,255,255,.25);
+      padding: 6px 12px;
+      border-radius: 30px;
+      color: #f6eff8;
+      font-size: 12px;
+    }
+
+    .coin-art {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 245px;
+    }
+
+    .coin {
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #e5ff9e, #a9d84c);
+      border: 10px solid #f1ffd1;
+      box-shadow: 0 18px 50px rgba(0,0,0,.25), inset 0 0 0 5px #a5cc50;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--plum);
+      font-size: 28px;
+      font-weight: 950;
+      transform: rotate(-12deg);
+      position: relative;
+    }
+
+    .coin::before {
+      content: "";
+      position: absolute;
+      inset: 17px;
+      border: 2px dashed rgba(57,35,68,.38);
+      border-radius: 50%;
+    }
+
+    .coin small {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .page-wrap {
+      max-width: 1160px;
+      margin: -25px auto 0;
+      padding: 0 22px 70px;
+      position: relative;
+    }
+
+    .quick-strip {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 22px;
+      margin-bottom: 42px;
+      gap: 18px;
+    }
+
+    .quick-item {
+      padding: 5px 15px;
+      border-right: 1px solid var(--line);
+    }
+
+    .quick-item:last-child {
+      border: 0;
+    }
+
+    .quick-item strong {
+      display: block;
+      color: var(--plum);
+      font-size: 17px;
+    }
+
+    .quick-item span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 270px;
+      gap: 35px;
+      align-items: start;
+    }
+
+    article {
+      min-width: 0;
+    }
+
+    .article-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: clamp(22px, 4vw, 43px);
+      box-shadow: 0 8px 28px rgba(48,29,57,.035);
+      margin-bottom: 25px;
+    }
+
+    .article-card h2 {
+      color: var(--plum);
+      font-size: clamp(24px, 3vw, 31px);
+      line-height: 1.25;
+      letter-spacing: -.7px;
+      margin: 5px 0 17px;
+    }
+
+    .article-card h3 {
+      color: var(--plum-light);
+      font-size: 19px;
+      margin: 25px 0 9px;
+    }
+
+    .article-card p {
+      margin: 0 0 16px;
+      color: #514b55;
+    }
+
+    .section-label {
+      color: #88a936;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .toc {
+      background: #f5f0f6;
+      border: 1px solid #e8ddeb;
+      border-radius: 14px;
+      padding: 23px;
+      margin-bottom: 25px;
+    }
+
+    .toc h2 {
+      font-size: 20px;
+      color: var(--plum);
+      margin-bottom: 12px;
+    }
+
+    .toc ol {
+      padding-left: 22px;
+      columns: 2;
+      column-gap: 25px;
+    }
+
+    .toc li {
+      padding: 3px 0;
+      font-size: 13px;
+      break-inside: avoid;
+    }
+
+    .toc a {
+      color: #594462;
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .tip {
+      background: var(--green-soft);
+      border-left: 4px solid var(--lime-dark);
+      padding: 17px 19px;
+      border-radius: 0 12px 12px 0;
+      margin: 20px 0;
+      color: #43542c;
+    }
+
+    .tip strong {
+      color: #34471e;
+    }
+
+    .steps {
+      display: grid;
+      gap: 13px;
+      margin: 20px 0;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      padding: 17px;
+      background: #fbf9fc;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+
+    .step-number {
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--plum);
+      color: var(--lime);
+      font-weight: 900;
+    }
+
+    .step h3 {
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .code-wrap {
+      background: #29212f;
+      color: #f4edfa;
+      padding: 18px 20px;
+      border-radius: 12px;
+      margin: 13px 0 20px;
+      overflow-x: auto;
+    }
+
+    .code-wrap span {
+      display: block;
+      color: #c9f36b;
+      font-size: 11px;
+      margin-bottom: 7px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .code-wrap code {
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+      background: white;
+      font-size: 13px;
+    }
+
+    th {
+      background: var(--plum);
+      color: white;
+      padding: 13px;
+      text-align: left;
+    }
+
+    td {
+      padding: 12px 13px;
+      border-bottom: 1px solid var(--line);
+      color: #514b55;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .heads {
+      color: #638d20;
+      font-weight: 800;
+    }
+
+    .tails {
+      color: #a34f70;
+      font-weight: 800;
+    }
+
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 13px;
+      margin: 18px 0;
+    }
+
+    .formula-card {
+      background: #f8f4fa;
+      border: 1px solid #eadfec;
+      padding: 17px;
+      border-radius: 13px;
+    }
+
+    .formula-card strong {
+      display: block;
+      color: var(--plum);
+      margin-bottom: 8px;
+    }
+
+    .formula-card code {
+      font-size: 12px;
+      color: #765185;
+      overflow-wrap: anywhere;
+    }
+
+    .mini-chart {
+      background: #fcfaf4;
+      border: 1px solid #eee8d9;
+      padding: 22px;
+      border-radius: 14px;
+      margin: 20px 0;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 65px 1fr 42px;
+      gap: 10px;
+      align-items: center;
+      margin: 13px 0;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 13px;
+      background: #eee8ed;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 20px;
+    }
+
+    .bar-heads {
+      width: 54%;
+      background: #9dcb4c;
+    }
+
+    .bar-tails {
+      width: 46%;
+      background: #bd8aa7;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+    }
+
+    .side-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 7px 20px rgba(48,29,57,.04);
+    }
+
+    .side-card h3 {
+      color: var(--plum);
+      font-size: 17px;
+      margin-bottom: 12px;
+    }
+
+    .side-card p, .side-card li {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .side-card ul {
+      padding-left: 18px;
+    }
+
+    .side-card li {
+      margin: 8px 0;
+    }
+
+    .side-highlight {
+      background: var(--plum);
+      color: white;
+      border-radius: 15px;
+      padding: 23px;
+      margin-bottom: 18px;
+    }
+
+    .side-highlight h3 {
+      color: var(--lime);
+      margin-bottom: 9px;
+    }
+
+    .side-highlight p {
+      color: #e8dfea;
+      font-size: 13px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+      padding: 17px 0;
+    }
+
+    .faq-item:last-child {
+      border-bottom: 0;
+    }
+
+    .faq-item h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+    }
+
+    .faq-item p {
+      margin: 0;
+    }
+
+    .conclusion {
+      background: linear-gradient(130deg, #392344, #5a3b65);
+      color: white;
+      border-radius: 18px;
+      padding: 32px;
+      margin-bottom: 25px;
+    }
+
+    .conclusion h2 {
+      color: var(--lime);
+      margin-bottom: 13px;
+    }
+
+    .conclusion p {
+      color: #eee5f0;
+    }
+
+    .site-footer {
+      background: #281b30;
+      color: #d9ccdf;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 13px;
+    }
+
+    .site-footer strong {
+      color: var(--lime);
+    }
+
+    @media (max-width: 850px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .coin-art {
+        min-height: 170px;
+      }
+
+      .coin {
+        width: 145px;
+        height: 145px;
+        font-size: 22px;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 58px 22px 65px;
+      }
+
+      h1 {
+        letter-spacing: -1.2px;
+      }
+
+      .quick-strip {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .quick-item {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 9px 5px 13px;
+      }
+
+      .quick-item:last-child {
+        border: 0;
+      }
+
+      .toc ol {
+        columns: 1;
+      }
+
+      .formula-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .article-card {
+        padding: 23px 19px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <div class="brand">FLIP<span>LAB</span></div>
+    <div class="nav-note">Practical Guides · Probability · Data</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Spreadsheet Learning Guide</div>
+      <h1>How to Create a Coin Toss Results Spreadsheet</h1>
+      <p>
+        A simple spreadsheet can turn a collection of heads and tails into useful
+        information. Learn how to record every toss, count outcomes, calculate
+        percentages, and organise your experiment in Excel or Google Sheets.
+      </p>
+      <div class="hero-tags">
+        <span>Excel</span>
+        <span>Google Sheets</span>
+        <span>Probability</span>
+        <span>Data Analysis</span>
+      </div>
+    </div>
+
+    <div class="coin-art">
+      <div class="coin">
+        <div>H
+          <small>HEADS</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="page-wrap">
+
+  <div class="quick-strip">
+    <div class="quick-item">
+      <strong>Beginner Friendly</strong>
+      <span>No advanced spreadsheet skills required</span>
+    </div>
+    <div class="quick-item">
+      <strong>Excel or Sheets</strong>
+      <span>Follow the same basic workflow in either tool</span>
+    </div>
+    <div class="quick-item">
+      <strong>Track Every Toss</strong>
+      <span>Count, compare, and review your results</span>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <article>
+
+      <nav class="toc">
+        <h2>In This Guide</h2>
+        <ol>
+          <li><a href="#why">Why use a spreadsheet?</a></li>
+          <li><a href="#prepare">Prepare your worksheet</a></li>
+          <li><a href="#columns">Create the columns</a></li>
+          <li><a href="#record">Record coin toss results</a></li>
+          <li><a href="#formulas">Add counting formulas</a></li>
+          <li><a href="#percentages">Calculate percentages</a></li>
+          <li><a href="#chart">Create a chart</a></li>
+          <li><a href="#simulation">Simulate coin tosses</a></li>
+          <li><a href="#analysis">Analyse your results</a></li>
+          <li><a href="#mistakes">Common mistakes</a></li>
+          <li><a href="#faq">Frequently asked questions</a></li>
+        </ol>
+      </nav>
+
+      <section class="article-card">
+        <div class="section-label">Introduction</div>
+        <h2>Turn Individual Tosses into Organised Data</h2>
+        <p>
+          A coin toss looks like a small experiment, but recording the results
+          of several flips can quickly become confusing. You might remember
+          the first few outcomes, but keeping an accurate count after 50 or
+          100 tosses is much easier when you use a spreadsheet.
+        </p>
+        <p>
+          A coin toss results spreadsheet gives every trial its own row.
+          Instead of relying on memory or writing marks on paper, you can
+          store the outcome, calculate the number of heads and tails, and
+          review the percentages whenever you need them. It also makes it
+          easier to compare multiple experiments.
+        </p>
+        <p>
+          You can create this worksheet in Microsoft Excel, Google Sheets,
+          or another spreadsheet application. If you want to understand the
+          basic process of getting a digital heads-or-tails result before
+          recording your data, try a <a href="https://coin-flip.com/" target="_blank" rel="noopener noreferrer">coin flip online</a>
+          tool as a convenient starting point.
+        </p>
+        <p>
+          This guide explains how to build a practical tracker from scratch.
+          You will also learn how formulas and charts can help you understand
+          the difference between observed results and expected probability.
+        </p>
+      </section>
+
+      <section class="article-card" id="why">
+        <div class="section-label">01 · Purpose</div>
+        <h2>Why Use a Spreadsheet for Coin Toss Results?</h2>
+        <p>
+          A spreadsheet is useful because it keeps the original observations
+          and the calculations in one place. Every outcome can be checked
+          against its trial number, which reduces the risk of losing or
+          accidentally counting a result twice.
+        </p>
+        <p>
+          For example, imagine that you toss a coin 100 times. You could write
+          down H and T on a piece of paper, but a spreadsheet can automatically
+          count each category and calculate its percentage. If you add more
+          results later, the summary can update without repeating the
+          calculations manually.
+        </p>
+
+        <h3>What information can you track?</h3>
+        <ul>
+          <li>The number assigned to each toss.</li>
+          <li>The result of each trial: Heads or Tails.</li>
+          <li>The running number of heads and tails.</li>
+          <li>The total number of completed tosses.</li>
+          <li>The observed percentage of each outcome.</li>
+          <li>Notes about the date, coin, or experiment conditions.</li>
+        </ul>
+
+        <div class="tip">
+          <strong>Helpful idea:</strong> Keep the original toss records separate
+          from your summary calculations. This makes it easier to check your
+          data if a total or percentage looks incorrect.
+        </div>
+      </section>
+
+      <section class="article-card" id="prepare">
+        <div class="section-label">02 · Setup</div>
+        <h2>Prepare Your Excel or Google Sheets Worksheet</h2>
+        <p>
+          Start by opening a blank workbook. You do not need a special template
+          or a paid add-on. A basic worksheet with clearly named columns is
+          enough for a small experiment.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div>
+              <h3>Open a new spreadsheet</h3>
+              <p>
+                Launch Microsoft Excel or Google Sheets and create a blank
+                workbook. Give it a descriptive name such as Coin Toss
+                Experiment.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div>
+              <h3>Add a worksheet title</h3>
+              <p>
+                In the first row, enter a title such as Coin Toss Results.
+                You can merge the title cells if you want a cleaner layout.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div>
+              <h3>Choose your experiment size</h3>
+              <p>
+                Decide whether you will record 20, 50, 100, or more tosses.
+                Leave enough rows for all planned observations.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <div>
+              <h3>Format the worksheet</h3>
+              <p>
+                Use bold headings, readable column widths, and a light
+                background for the header row. Avoid excessive decoration
+                that makes the data harder to read.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="article-card" id="columns">
+        <div class="section-label">03 · Structure</div>
+        <h2>Create the Main Spreadsheet Columns</h2>
+        <p>
+          A good worksheet should make each observation easy to identify.
+          In row 3, create the following column headings. This example leaves
+          the first two rows available for the title and experiment details.
+        </p>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Heading</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A</td>
+                <td>Trial Number</td>
+                <td>Identifies each toss</td>
+              </tr>
+              <tr>
+                <td>B</td>
+                <td>Outcome</td>
+                <td>Stores Heads or Tails</td>
+              </tr>
+              <tr>
+                <td>C</td>
+                <td>Heads Count</td>
+                <td>Running count of heads</td>
+              </tr>
+              <tr>
+                <td>D</td>
+                <td>Tails Count</td>
+                <td>Running count of tails</td>
+              </tr>
+              <tr>
+                <td>E</td>
+                <td>Notes</td>
+                <td>Optional experiment comments</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          You can keep the running counts in a separate summary area instead
+          of adding them to every row. For beginners, the simpler layout is
+          often easier to maintain. The important part is that each actual
+          toss has one clearly recorded outcome.
+        </p>
+        <p>
+          If you are exploring the data side of the activity, a
+          <a href="https://coin-flip-data-guide.bitbucket.io/" target="_blank" rel="noopener noreferrer">coin flip data guide</a>
+          can provide another point of reference for organising observations
+          and understanding the information collected.
+        </p>
+      </section>
+
+      <section class="article-card" id="record">
+        <div class="section-label">04 · Data Entry</div>
+        <h2>Record Each Coin Toss Result Correctly</h2>
+        <p>
+          Enter the trial numbers in column A, beginning with 1. Continue
+          with 2, 3, 4, and so on. You can type the first two numbers, select
+          both cells, and use the fill handle to continue the sequence.
+        </p>
+        <p>
+          In column B, enter the result of each toss. Use the same spelling
+          every time: Heads or Tails. Consistent labels matter because
+          spreadsheet functions such as COUNTIF look for matching text.
+          Avoid switching between H, Head, heads, and other variations
+          unless you have deliberately designed formulas to handle them.
+        </p>
+
+        <h3>Example of recorded results</h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Outcome</th>
+                <th>Trial</th>
+                <th>Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td class="heads">Heads</td><td>6</td><td class="tails">Tails</td></tr>
+              <tr><td>2</td><td class="tails">Tails</td><td>7</td><td class="heads">Heads</td></tr>
+              <tr><td>3</td><td class="heads">Heads</td><td>8</td><td class="tails">Tails</td></tr>
+              <tr><td>4</td><td class="heads">Heads</td><td>9</td><td class="heads">Heads</td></tr>
+              <tr><td>5</td><td class="tails">Tails</td><td>10</td><td class="tails">Tails</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          These ten rows are an illustrative example, not a prediction of
+          what your own experiment should produce. Your actual sequence may
+          contain more heads, more tails, or an equal number of both.
+        </p>
+        <p>
+          If you are not using a physical coin, you can also explore a
+          <a href="http://flip-coin-without-app.getenjoyment.net/" target="_blank" rel="noopener noreferrer">browser-based coin flip without installing an app</a>
+          and enter each displayed result into your worksheet. Make sure you
+          record each result only once.
+        </p>
+      </section>
+
+      <section class="article-card" id="formulas">
+        <div class="section-label">05 · Formulas</div>
+        <h2>Use Spreadsheet Formulas to Count Heads and Tails</h2>
+        <p>
+          Once your outcomes are entered, formulas can calculate the totals
+          automatically. Suppose your results are stored in cells B4 through
+          B103. This range contains 100 possible trial entries.
+        </p>
+
+        <h3>Count the number of heads</h3>
+        <p>
+          Select an empty summary cell and enter the following formula:
+        </p>
+        <div class="code-wrap">
+          <span>Excel and Google Sheets</span>
+          <code>=COUNTIF(B4:B103,"Heads")</code>
+        </div>
+        <p>
+          COUNTIF checks the selected range and counts cells that contain
+          the word Heads. If 54 cells contain that result, the formula
+          returns 54.
+        </p>
+
+        <h3>Count the number of tails</h3>
+        <p>
+          Use the same function with Tails as the condition:
+        </p>
+        <div class="code-wrap">
+          <span>Count tails</span>
+          <code>=COUNTIF(B4:B103,"Tails")</code>
+        </div>
+
+        <h3>Calculate the number of recorded trials</h3>
+        <p>
+          You can count all non-empty outcome cells with COUNTA:
+        </p>
+        <div class="code-wrap">
+          <span>Total recorded outcomes</span>
+          <code>=COUNTA(B4:B103)</code>
+        </div>
+
+        <div class="tip">
+          <strong>Check your totals:</strong> The number of heads plus the
+          number of tails should equal the number of valid recorded outcomes
+          when every trial has exactly one of these two results.
+        </div>
+      </section>
+
+      <section class="article-card" id="percentages">
+        <div class="section-label">06 · Percentages</div>
+        <h2>Calculate the Percentage of Heads and Tails</h2>
+        <p>
+          Counts tell you how often each side appeared. Percentages show
+          each result in relation to the total number of recorded tosses.
+          This makes it easier to compare experiments with different sample
+          sizes.
+        </p>
+
+        <p>
+          The basic calculation is:
+        </p>
+        <div class="formula-grid">
+          <div class="formula-card">
+            <strong>Heads Percentage</strong>
+            <code>(Heads Count ÷ Total Tosses) × 100</code>
+          </div>
+          <div class="formula-card">
+            <strong>Tails Percentage</strong>
+            <code>(Tails Count ÷ Total Tosses) × 100</code>
+          </div>
+        </div>
+
+        <p>
+          Suppose your spreadsheet summary shows 54 heads and 46 tails from
+          100 valid tosses. The observed percentages are 54% heads and 46%
+          tails. You can calculate these values with formulas rather than
+          working them out manually.
+        </p>
+
+        <div class="code-wrap">
+          <span>Heads percentage</span>
+          <code>=IFERROR(Heads_Count_Cell/Total_Tosses_Cell,0)</code>
+        </div>
+
+        <div class="code-wrap">
+          <span>Tails percentage</span>
+          <code>=IFERROR(Tails_Count_Cell/Total_Tosses_Cell,0)</code>
+        </div>
+
+        <p>
+          Replace the example cell names with the actual cell references in
+          your worksheet. Format the result cells as Percentage using the
+          spreadsheet toolbar. If your formula returns 0.54, percentage
+          formatting displays it as 54%.
+        </p>
+        <p>
+          The IFERROR function prevents an error from appearing when the
+          total number of recorded tosses is zero. Once you add observations,
+          the percentage will calculate normally.
+        </p>
+      </section>
+
+      <section class="article-card" id="chart">
+        <div class="section-label">07 · Visualisation</div>
+        <h2>Create a Heads and Tails Chart</h2>
+        <p>
+          A chart makes your summary easier to understand at a glance.
+          A simple column chart or bar chart can compare the number of
+          heads with the number of tails.
+        </p>
+
+        <div class="mini-chart">
+          <strong style="color:#392344;">Illustrative result: 100 tosses</strong>
+          <div class="bar-row">
+            <span>Heads</span>
+            <div class="bar-track"><div class="bar-fill bar-heads"></div></div>
+            <strong>54%</strong>
+          </div>
+          <div class="bar-row">
+            <span>Tails</span>
+            <div class="bar-track"><div class="bar-fill bar-tails"></div></div>
+            <strong>46%</strong>
+          </div>
+          <p style="font-size:12px;margin:13px 0 0;">
+            Example proportions only. Your own chart should use your actual
+            spreadsheet results.
+          </p>
+        </div>
+
+        <h3>How to insert a chart</h3>
+        <ol>
+          <li>Create a small summary table with the labels Heads and Tails.</li>
+          <li>Place the corresponding counts or percentages beside them.</li>
+          <li>Select the summary table, including its headings.</li>
+          <li>Choose Insert and then select a chart type.</li>
+          <li>Add a clear title, such as Coin Toss Outcome Distribution.</li>
+          <li>Check that the chart uses the correct data range.</li>
+        </ol>
+
+        <p>
+          A bar chart is useful for comparing the two outcomes. A line chart
+          can be more suitable if you want to examine how the running
+          percentage of heads changes as the number of tosses increases.
+        </p>
+      </section>
+
+      <section class="article-card" id="simulation">
+        <div class="section-label">08 · Optional Simulation</div>
+        <h2>Generate Simulated Coin Toss Results Automatically</h2>
+        <p>
+          You can also use a spreadsheet to generate example outcomes instead
+          of entering every result by hand. This is useful for practising
+          formulas or exploring what repeated random trials can look like.
+          It is different from recording the results of a physical coin toss.
+        </p>
+
+        <h3>Method using RAND</h3>
+        <p>
+          In a spare column, enter a random-number formula:
+        </p>
+        <div class="code-wrap">
+          <span>Generate a random decimal</span>
+          <code>=RAND()</code>
+        </div>
+        <p>
+          Then use an IF formula to convert the decimal into one of two
+          labels. For example, if the random number is in cell C4:
+        </p>
+        <div class="code-wrap">
+          <span>Convert random value to a result</span>
+          <code>=IF(C4&lt;0.5,"Heads","Tails")</code>
+        </div>
+        <p>
+          Copy the formulas down to generate more simulated outcomes. This
+          method creates a simple model with a 50% threshold for each side.
+          Spreadsheet random functions can recalculate when the workbook
+          changes or recalculates, so results may change unless you copy
+          and paste them as values to preserve a particular simulation.
+        </p>
+
+        <p>
+          For additional background on how computer-generated outcomes are
+          produced, see this resource about
+          <a href="https://ai-randomness-explained.great-site.net/?i=1" target="_blank" rel="noopener noreferrer">AI and digital randomness explained</a>.
+          A spreadsheet simulation is useful for learning, but it should
+          not automatically be treated as proof that a physical coin or
+          digital tool is perfectly fair.
+        </p>
+      </section>
+
+      <section class="article-card" id="analysis">
+        <div class="section-label">09 · Interpretation</div>
+        <h2>Analyse the Results of Your Coin Toss Experiment</h2>
+        <p>
+          Once the spreadsheet contains enough observations, review the
+          summary instead of looking only at individual rows. Start by
+          checking the total number of valid tosses. Then compare the
+          observed counts and percentages.
+        </p>
+
+        <h3>Compare observed results with expected probability</h3>
+        <p>
+          For an ideal fair coin, heads and tails each have a theoretical
+          probability of 50%. This does not mean every group of 100 tosses
+          must contain exactly 50 heads and 50 tails. Random variation
+          means a particular experiment can produce an uneven split.
+        </p>
+
+        <h3>Look at different sample sizes</h3>
+        <p>
+          You can compare a short experiment with a longer one by creating
+          separate summaries for 10, 50, 100, or 500 tosses. The percentage
+          of heads may move around considerably in a small sample. Across
+          many independent trials, the observed proportion tends to settle
+          closer to the theoretical probability, although it is not
+          guaranteed to equal exactly 50%.
+        </p>
+
+        <p>
+          This is an example of the law of large numbers. It describes
+          long-run behaviour, not a promise about the next toss or the
+          exact result of a particular experiment. For a deeper explanation
+          of sampling and probability, explore this
+          <a href="http://random-sampling-mathematics.lovestoblog.com/?i=1" target="_blank" rel="noopener noreferrer">random sampling and mathematics resource</a>.
+        </p>
+
+        <h3>Write a short experiment conclusion</h3>
+        <p>
+          A useful conclusion should state how many tosses were recorded,
+          how many heads and tails appeared, and what percentages those
+          counts represent. You can then compare the observed results with
+          the 50/50 theoretical model and explain any difference as
+          variation in the sample.
+        </p>
+
+        <div class="tip">
+          <strong>Remember:</strong> A run of several heads does not make
+          tails more likely on the next independent toss. Each toss of an
+          ideal fair coin remains a separate 50/50 event.
+        </div>
+      </section>
+
+      <section class="article-card" id="mistakes">
+        <div class="section-label">10 · Quality Checks</div>
+        <h2>Common Mistakes to Avoid in Your Spreadsheet</h2>
+        <p>
+          Even a simple worksheet can produce misleading summaries if the
+          original data is inconsistent. Before using the results, check
+          for these common problems:
+        </p>
+
+        <h3>1. Using different labels for the same outcome</h3>
+        <p>
+          If some cells contain Heads and others contain H, a formula
+          searching for Heads will not count the shorter label. Choose
+          one consistent format and use it throughout the worksheet.
+        </p>
+
+        <h3>2. Counting blank cells as completed trials</h3>
+        <p>
+          Your total should include only valid recorded outcomes. A planned
+          row is not a completed toss. Use COUNTA on the outcome column
+          rather than assuming every prepared row contains data.
+        </p>
+
+        <h3>3. Overwriting original observations</h3>
+        <p>
+          Keep a record of the actual results. If you need to correct an
+          entry, make the change carefully and consider adding a note
+          explaining the correction.
+        </p>
+
+        <h3>4. Treating a small sample as proof of bias</h3>
+        <p>
+          A result such as 7 heads and 3 tails in ten tosses does not
+          automatically mean the coin is biased. Small samples can show
+          noticeable variation. More observations and a suitable statistical
+          analysis are needed before drawing stronger conclusions.
+        </p>
+
+        <h3>5. Forgetting that random formulas can recalculate</h3>
+        <p>
+          If you simulate outcomes with RAND, the values may change when
+          the workbook recalculates. Preserve the generated values if you
+          want to keep a particular simulation for later review.
+        </p>
+      </section>
+
+      <section class="article-card" id="faq">
+        <div class="section-label">Quick Answers</div>
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>1. Can I create a coin toss spreadsheet in Google Sheets?</h3>
+          <p>
+            Yes. Google Sheets supports common spreadsheet functions such
+            as COUNTIF, COUNTA, IF, and RAND. You can use them to record
+            outcomes, calculate totals, and create charts.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>2. How do I count heads automatically in Excel?</h3>
+          <p>
+            Use COUNTIF with the range containing your results and Heads
+            as the condition. For example:
+            =COUNTIF(B4:B103,"Heads").
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>3. How many coin tosses should I record?</h3>
+          <p>
+            It depends on the purpose of your experiment. Ten or twenty
+            tosses can demonstrate the basic process, while 100 or more
+            provide a larger sample for comparing observed proportions.
+            A larger sample does not guarantee an exact 50/50 result.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>4. Can a spreadsheet calculate heads and tails percentages?</h3>
+          <p>
+            Yes. Divide the count for each outcome by the total number of
+            valid tosses, then format the result as a percentage. You can
+            use IFERROR to handle a worksheet with no recorded outcomes.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>5. Can I use a spreadsheet to simulate a coin toss?</h3>
+          <p>
+            Yes. A formula such as RAND combined with IF can generate
+            simulated heads and tails outcomes. Remember that these are
+            computer-generated values, not observations from a physical
+            coin experiment.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>6. Why are my heads and tails totals different?</h3>
+          <p>
+            Random experiments do not have to produce equal counts in
+            every sample. A fair coin has an expected probability of
+            50% for each side, but short-term results can be uneven.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>7. Which chart is best for coin toss results?</h3>
+          <p>
+            A bar or column chart is a straightforward way to compare
+            heads and tails counts. A line chart can help show how the
+            running percentage changes as more tosses are recorded.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>8. Should I keep the original results after calculating totals?</h3>
+          <p>
+            Yes. Keeping the original observations makes your calculations
+            easier to verify and allows you to correct errors without
+            losing the experiment's history.
+          </p>
+        </div>
+      </section>
+
+      <section class="conclusion">
+        <h2>Final Thoughts</h2>
+        <p>
+          Creating a coin toss results spreadsheet is a practical way to
+          organise an experiment and understand its outcomes. With a few
+          clearly labelled columns and basic formulas, you can record every
+          toss, count heads and tails, calculate percentages, and display
+          your findings in a chart.
+        </p>
+        <p>
+          Whether you use Excel or Google Sheets, focus on accurate data
+          entry and consistent labels. Review the sample size before
+          interpreting the results, and remember that a difference from
+          50/50 in one experiment does not automatically indicate a biased
+          coin. A well-organised spreadsheet helps you explain what your
+          data actually shows.
+        </p>
+      </section>
+
+    </article>
+
+    <aside class="sidebar">
+      <div class="side-highlight">
+        <h3>Build a Better Record</h3>
+        <p>
+          Start with one row per toss. Keep the raw observations clear,
+          then let spreadsheet formulas handle the counting.
+        </p>
+      </div>
+
+      <div class="side-card">
+        <h3>What You Need</h3>
+        <ul>
+          <li>Excel or Google Sheets</li>
+          <li>A coin or simulation</li>
+          <li>A list of trial numbers</li>
+          <li>Heads and tails labels</li>
+          <li>Basic formulas</li>
+        </ul>
+      </div>
+
+      <div class="side-card">
+        <h3>Useful Formulas</h3>
+        <p><strong>Count heads:</strong><br>COUNTIF</p>
+        <p><strong>Count entries:</strong><br>COUNTA</p>
+        <p><strong>Generate a decimal:</strong><br>RAND</p>
+        <p><strong>Choose a label:</strong><br>IF</p>
+      </div>
+
+      <div class="side-card">
+        <h3>Good Spreadsheet Habits</h3>
+        <ul>
+          <li>Use consistent outcome labels.</li>
+          <li>Keep original observations.</li>
+          <li>Check totals before analysis.</li>
+          <li>Label charts clearly.</li>
+          <li>Save a copy of important results.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p><strong>FLIPLAB</strong> · Clear Guides for Probability and Data</p>
+  <p>Learn, record, compare, and understand your results.</p>
+</footer>
+
+</body>
+</html>
